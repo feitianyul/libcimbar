@@ -11,14 +11,14 @@ jobs:
       matrix:
         config:
         - name: "linux gcc9"
-          os: ubuntu-20.04
+          os: ubuntu-22.04
           env: CXX="g++-9" CC="gcc-9"
 
         - name: "linux gcc-latest"
           os: ubuntu-latest
 
         - name: "linux clang"
-          os: ubuntu-20.04
+          os: ubuntu-22.04
           env: CXX="clang++" CC="clang"
           extra-packages: "clang"
 
@@ -50,7 +50,7 @@ jobs:
       run: python3 -m unittest
 
   cppcheck:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
