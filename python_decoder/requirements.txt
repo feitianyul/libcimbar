@@ -1,0 +1,16 @@
+# Cimbar Decoder Python Dependencies
+# 彩色图形矩阵条形码解码器 Python依赖
+
+# 屏幕捕获
+mss>=9.0.1
+
+# 图像处理
+opencv-python>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+
+# 窗口管理（可选，用于窗口捕获）
+pygetwindow>=0.0.9
+
+# GUI界面（tkinter通常随Python自带，无需安装）
+# tkinter

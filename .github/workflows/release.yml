@@ -7,12 +7,63 @@ on:
 
 jobs:
   package-cimbar:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Get the code
         uses: actions/checkout@v3
         with:
           submodules: 'recursive'
+
+  package-cimbar-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+
+      - name: Install OpenCV and GLFW with vcpkg
+        run: |
+          vcpkg install opencv:x64-windows glfw3:x64-windows
+
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config Release
+
+      - name: Install
+        run: |
+          cd build
+          cmake --install . --config Release
+
+      - name: Upload Windows build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: cimbar-windows
+          path: dist/bin/cimbar.exe
+
+      - name: Create ZIP archive
+        run: |
+          Compress-Archive -Path dist/bin/cimbar.exe -DestinationPath cimbar-windows.zip
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: cimbar-windows.zip
 
       - name: Get openCV
         run: |
