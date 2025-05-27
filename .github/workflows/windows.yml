@@ -1,0 +1,45 @@
+name: Windows Build
+
+on: [push, pull_request]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgGitCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
+
+    - name: Install OpenCV and GLFW with vcpkg
+      run: |
+        vcpkg install opencv:x64-windows glfw3:x64-windows
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config Release
+
+    - name: Install
+      run: |
+        cd build
+        cmake --install . --config Release
+
+    - name: Upload cimbar.exe
+      uses: actions/upload-artifact@v3
+      with:
+        name: cimbar-windows
+        path: dist/bin/cimbar.exe
