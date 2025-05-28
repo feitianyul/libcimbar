@@ -31,22 +31,22 @@ jobs:
       run: sudo apt-get update && sudo apt-get install libopencv-dev libglfw3-dev libgles2-mesa-dev ${{ matrix.config.extra-packages }}
 
     - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/build
+      run: cmake -E make_directory ${{github.workspace}}/build
 
     - name: Configure CMake
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{github.workspace}}/build
       run: ${{ matrix.config.env }} cmake $GITHUB_WORKSPACE
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{github.workspace}}/build
       run: make -j2 && make install
 
     - name: Test
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{github.workspace}}/build
       run: make test CTEST_OUTPUT_ON_FAILURE=TRUE
 
     - name: Usage test
-      working-directory: ${{runner.workspace}}/libcimbar/test/py
+      working-directory: ${{github.workspace}}/test/py
       run: python3 -m unittest
 
   cppcheck:
