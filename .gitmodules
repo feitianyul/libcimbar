@@ -3,3 +3,7 @@
 	url = https://github.com/sz3/cimbar-samples
 	branch = v0.5
 	ignore = dirty
+
+[submodule "vcpkg"]
+	path = vcpkg
+	url = https://github.com/Microsoft/vcpkg.git
