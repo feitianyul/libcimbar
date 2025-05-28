@@ -46,7 +46,9 @@ public:
 
 		// grab the front READLEN bits. Then put them in the right place in the uint64_t output.
 		// if byte_offset is 1, we want to shift READLEN. if 2, READLEN*2...
-		uint64_t total = ((uint64_t)(_bits >> (N - bit_offset - READLEN)) & BITMASK) << (byte_offset * READLEN);
+		// 拆分位操作为两步，先获取位值，再进行位移，以确保在不同环境下行为一致
+		uint64_t bits_value = static_cast<uint64_t>((_bits >> (N - bit_offset - READLEN)) & BITMASK);
+		uint64_t total = bits_value << static_cast<uint64_t>(byte_offset * READLEN);
 		return total | extract(t...);
 	}
 
