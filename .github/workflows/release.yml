@@ -27,8 +27,6 @@ jobs:
 
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgGitCommitId: '5568f110b509a9fd90711978a7cb76bae75bb092'
 
       - name: Install OpenCV and GLFW with vcpkg
         run: |
