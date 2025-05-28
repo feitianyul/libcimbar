@@ -44,10 +44,17 @@ public:
 	{
 		constexpr auto byte_offset = sizeof...(T);
 		
-		// 确保位操作的一致性，先进行右移，再应用掩码，最后转换类型
-		auto shifted_bits = _bits >> (N - bit_offset - READLEN);
-		auto masked_bits = shifted_bits & static_cast<C>(BITMASK);
-		uint64_t bits_value = static_cast<uint64_t>(masked_bits);
+		// 确保位操作的安全性和一致性
+		constexpr size_t shift_amount = N - READLEN;
+		if (bit_offset > shift_amount) {
+			return extract(t...);
+		}
+		
+		// 分步进行位操作以避免编译器差异
+		C shifted = _bits >> (shift_amount - bit_offset);
+		C masked = shifted & static_cast<C>(BITMASK);
+		uint64_t bits_value = static_cast<uint64_t>(masked);
+		
 		uint64_t total = bits_value << (byte_offset * READLEN);
 		return total | extract(t...);
 	}
