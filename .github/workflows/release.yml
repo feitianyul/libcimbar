@@ -27,6 +27,9 @@ jobs:
 
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
+        with:
+          # 使用更新的 vcpkg 版本，支持 x-gha
+          vcpkgGitCommitId: 'latest'
 
       - name: Install OpenCV and GLFW with vcpkg
         run: |
