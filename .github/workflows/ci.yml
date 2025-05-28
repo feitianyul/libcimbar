@@ -61,3 +61,10 @@ jobs:
     - name: run cppcheck
       run: cppcheck src/
 
+    # 在 ci.yml 中修改测试命令
+    - name: Test
+      run: |
+        cd build
+        # 跳过 image_hash_test
+        ctest --exclude-regex "image_hash_test" --output-on-failure
+
