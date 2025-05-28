@@ -28,12 +28,15 @@ jobs:
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
-          # 使用更新的 vcpkg 版本，支持 x-gha
-          vcpkgGitCommitId: 'latest'
+          vcpkgGitCommitId: 'f7423ee180c4b7f40d43402c2feb3859161ef625'
 
       - name: Install OpenCV and GLFW with vcpkg
         run: |
+          # 设置环境变量避免二进制缓存问题
+          $env:VCPKG_BINARY_SOURCES = "clear;default"
           vcpkg install opencv:x64-windows glfw3:x64-windows
+        env:
+          VCPKG_BINARY_SOURCES: "clear;default"
 
       - name: Configure CMake
         run: |
