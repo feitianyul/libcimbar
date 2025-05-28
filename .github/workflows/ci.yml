@@ -26,6 +26,8 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
+        # 或者改为只初始化已配置的子模块
+        # submodules: true
 
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install libopencv-dev libglfw3-dev libgles2-mesa-dev ${{ matrix.config.extra-packages }}
