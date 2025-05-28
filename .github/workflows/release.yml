@@ -51,7 +51,7 @@ jobs:
           cmake --install . --config Release
 
       - name: Upload Windows build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: cimbar-windows
           path: dist/bin/cimbar.exe
