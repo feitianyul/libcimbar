@@ -43,12 +43,12 @@ public:
 	uint64_t extract(unsigned bit_offset, const T&... t)
 	{
 		constexpr auto byte_offset = sizeof...(T);
-
-		// grab the front READLEN bits. Then put them in the right place in the uint64_t output.
-		// if byte_offset is 1, we want to shift READLEN. if 2, READLEN*2...
-		// 拆分位操作为两步，先获取位值，再进行位移，以确保在不同环境下行为一致
-		uint64_t bits_value = static_cast<uint64_t>((_bits >> (N - bit_offset - READLEN)) & BITMASK);
-		uint64_t total = bits_value << static_cast<uint64_t>(byte_offset * READLEN);
+		
+		// 确保位操作的一致性，先进行右移，再应用掩码，最后转换类型
+		auto shifted_bits = _bits >> (N - bit_offset - READLEN);
+		auto masked_bits = shifted_bits & static_cast<C>(BITMASK);
+		uint64_t bits_value = static_cast<uint64_t>(masked_bits);
+		uint64_t total = bits_value << (byte_offset * READLEN);
 		return total | extract(t...);
 	}
 
